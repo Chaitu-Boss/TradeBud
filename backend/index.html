@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Advisor Subscription</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Subscribe to Advisor</h2>
+
+  <!-- Replace with real IDs -->
+  <input type="hidden" id="investorId" value="INVESTOR_UUID_HERE" />
+  <input type="hidden" id="advisorId" value="ADVISOR_UUID_HERE" />
+
+  <button onclick="subscribe()">Subscribe (₹499)</button>
+
+  <div id="status"></div>
+
+  <script>
+    async function subscribe() {
+      const investorId = document.getElementById("investorId").value;
+      const advisorId = document.getElementById("advisorId").value;
+      const status = document.getElementById("status");
+
+      status.innerText = "Creating payment order...";
+
+      try {
+        // 1️⃣ Create Razorpay order
+        const orderRes = await fetch(
+          "http://localhost:8080/api/investor/subscriptions/create-order",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              investorId,
+              advisorId,
+              amount: 499
+            })
+          }
+        );
+
+        const order = await orderRes.json();
+
+        if (!order.orderId) {
+          throw new Error("Failed to create order");
+        }
+
+        status.innerText = "Opening payment window...";
+
+        // 2️⃣ Razorpay checkout options
+        const options = {
+          key: order.razorpayKey,
+          amount: order.amount,
+          currency: order.currency,
+          name: "Advisor Subscription",
+          description: "Monthly Advisor Plan",
+          order_id: order.orderId,
+
+          handler: async function (response) {
+            status.innerText = "Verifying payment...";
+
+            // 3️⃣ Verify payment with backend
+            const verifyRes = await fetch(
+              "http://localhost:8080/api/investor/subscriptions/verify-payment",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  investorId,
+                  advisorId,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              }
+            );
+
+            const result = await verifyRes.json();
+
+            if (verifyRes.ok) {
+              status.innerText = "✅ Subscription activated successfully!";
+            } else {
+              status.innerText = "❌ " + (result.message || "Verification failed");
+            }
+          },
+
+          modal: {
+            ondismiss: function () {
+              status.innerText = "❌ Payment cancelled by user";
+            }
+          },
+
+          prefill: {
+            email: "testuser@gmail.com",
+            contact: "9999999999"
+          },
+
+          theme: {
+            color: "#0a7cff"
+          }
+        };
+
+        // 4️⃣ Open Razorpay popup
+        const rzp = new Razorpay(options);
+        rzp.open();
+
+      } catch (err) {
+        console.error(err);
+        status.innerText = "❌ " + err.message;
+      }
+    }
+  </script>
+
+</body>
+</html>

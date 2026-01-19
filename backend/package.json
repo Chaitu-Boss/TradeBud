@@ -1,0 +1,27 @@
+{
+  "name": "technova26",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.90.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.3",
+    "ethers": "^6.16.0",
+    "express": "^5.2.1",
+    "http": "^0.0.1-security",
+    "kiteconnect": "^5.1.0",
+    "nodemailer": "^7.0.12",
+    "razorpay": "^2.9.6",
+    "sequelize": "^6.37.7"
+  }
+}
