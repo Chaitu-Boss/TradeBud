@@ -72,7 +72,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-[#0b0f14] text-white flex items-center justify-center px-6">
       <div className="w-full max-w-md bg-[#0f1622] border border-white/10 rounded-2xl p-8">
-        <h1 className="text-2xl font-bold text-yellow-400">RA Hub</h1>
+        <h1 className="text-2xl font-bold text-yellow-400">TradeBud</h1>
         <p className="text-gray-400 text-sm mt-1">Login to your account</p>
 
         {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
