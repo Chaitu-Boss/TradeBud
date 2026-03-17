@@ -5,7 +5,7 @@
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
     <td align="center" style="width: 50%; padding: 10px; border: 1px solid #333;">
-      <img src="/images/tradebud-architecture.png width="100%" alt="tradebud-architecture"/>
+      <img src="/images/tradebud-architecture.png" width="100%" alt="tradebud-architecture"/>
       <br/>
       <strong>1. Project Architecture</strong>
       <p>The Entire Flow of the Project depicting all the important services.</p>
