@@ -193,19 +193,18 @@ VITE_API_URL=http://localhost:8000
 ```
 ---
 
-## Ranking Algorithm
+## 📊 Ranking Algorithm
 
-Advisors are ranked using a **normalised composite score** across five metrics:
+Advisors are ranked using a **normalized composite score** based on key performance and risk metrics.
+
+### 🧮 Metrics & Weights
 
 | Metric | Weight | Description |
 |---|---|---|
-| Trust Score | 30% | Weighted composite of accuracy, ROI, drawdown, trade count, win/loss |
-| Consistency | 20% | Inverse of monthly P&L standard deviation (lower volatility = higher score) |
-| Max Drawdown | 20% | Lower drawdown scores higher (inverted normalisation) |
-| ROI | 20% | Total return on invested capital |
-| Accuracy | 10% | Percentage of winning trades |
+| **Sharpe Ratio** | 40% | Measures risk-adjusted return (higher = better performance per unit risk) |
+| **Max Drawdown** | 30% | Captures worst peak-to-trough loss; lower drawdown is rewarded |
+| **P&L (Profit & Loss)** | 30% | Absolute profit or loss generated over the evaluation period |
 
-All raw values are **min-max normalised** to a 0–100 scale before weighting, ensuring fair comparison across advisors with different trade volumes and histories.
 
 ---
 
